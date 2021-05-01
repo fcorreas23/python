@@ -1,28 +1,18 @@
-import sys
-import csv
-import os.path
-import json
+#! /usr/bin/env python3
+
+import os.path, sys, json, sys, argparse
 from collections import OrderedDict
 from Bio import SeqIO
 
-
-def main():
-	try:
-		sys.argv[1]
-	except Exception as e:
-		print("ERROR: Faltal Parametros")
-		sys.exit(0)
-
-	header   = ["locus", "sequence", "description", "length"]
-	basename = os.path.basename(sys.argv[1]).split('.')
-	jsonFile = fastaTojson( sys.argv[1], basename, header)
-
-	print(f'{jsonFile} ha sido generado')
-	
+def getArgs(): 
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-i', '--input', required=True, metavar='<FILE>', help='Input sequence fasta file.')
+	args = parser.parse_args()
+	return args
 
 def fastaTojson( fastaFile, basename, header):
-	
-	filename = f'{basename[0]}.json'
+    	
+	filename = f'{basename}.json'
 	data = []
 	
 	for seq_record in SeqIO.parse(fastaFile, 'fasta'):
@@ -36,6 +26,19 @@ def fastaTojson( fastaFile, basename, header):
 		json.dump(data, jsonfile, indent=2)
 
 	return filename
+
+def main():
+	args = getArgs()
+
+	header   = ["locus", "sequence", "description", "length"]
+	filename = os.path.basename( args.input)
+	basename = filename.split('.')
+	jsonFile = fastaTojson( args.input, basename[0], header)
+
+	print(f'{jsonFile} ha sido generado')
+	
+
+
 
 
 if __name__ == '__main__':
