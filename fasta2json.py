@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-import os.path, sys, json, sys, argparse
+import os.path, sys, json, argparse
 from collections import OrderedDict
 from Bio import SeqIO
 
@@ -10,9 +10,10 @@ def getArgs():
 	args = parser.parse_args()
 	return args
 
-def fastaTojson( fastaFile, basename, header):
+def fastaTojson( fastaFile, basename):
     	
 	filename = f'{basename}.json'
+	header   = ["locus", "sequence", "description", "length"]
 	data = []
 	
 	for seq_record in SeqIO.parse(fastaFile, 'fasta'):
@@ -30,10 +31,9 @@ def fastaTojson( fastaFile, basename, header):
 def main():
 	args = getArgs()
 
-	header   = ["locus", "sequence", "description", "length"]
 	filename = os.path.basename( args.input)
 	basename = filename.split('.')
-	jsonFile = fastaTojson( args.input, basename[0], header)
+	jsonFile = fastaTojson( args.input, basename[0])
 
 	print(f'{jsonFile} ha sido generado')
 	

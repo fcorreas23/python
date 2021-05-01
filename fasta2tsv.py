@@ -40,6 +40,5 @@ def main():
 	print(f'{tsvFile} ha sido generado')	
 
 
-
 if __name__ == '__main__':
 	main()
